@@ -25,16 +25,16 @@ test.describe('testing quantified-self-fe', function() {
   test.it("lists all foods", function() {
   // $ajax(blah blah blach) and make sure what you get here is the info below in thetest...
   // this is a lazy test, to make it more robust make the ajax call and test the things
-  driver.get(`${frontEndLocation}`)
+    driver.get(`${frontEndLocation}`)
   // the GIVEN
-  driver.wait(until.elementLocated({css: "#food-table"}))
+    driver.wait(until.elementLocated({css: "#food-table"}))
 // the WHEN (something appears on the page)
 
 // THEN there should be three things on the page (add more robust assertions here)
-  driver.findElements({css: "#food-table"})
-  .then(function (foods) {
-    assert.lengthOf(foods, 6);
+    driver.findElements({css: "#food-table"})
+    .then(function (foods) {
+      assert.lengthOf(foods, 6);
+    })
   })
-})
 
 })

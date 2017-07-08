@@ -20,24 +20,23 @@
               <th></th>
             </tr>
             <tr>
-              <td> Food blah blah blah...<!-- make ajax call here --></td>
+              <td> Sample Food<!-- make ajax call here --></td>
               <td>1234<!-- How to get the stuff from the db?? Food.allFoods().foreach...calories --></td>
               <td><button id='remove-food'>Remove</button></td>
-            </tr>
-            <tr>
-              <td> Food blah blah blah...<!-- find stuff from db --></td>
-              <td>1234<!-- How to get the stuff from the db?? Food.allFoods().foreach...calories --></td>
-              <td id='table-button'><button id='remove-food'>Remove</button></td>
             </tr>
           </table>
 
       </div>
       <div id="add-food">
         <h3 id='title'>Add New Food</h3>
-        <form id='new-food'>
-          <input type='text' id='foodName' placeholder="Name of food"/>
-          <input type='text' id='foodCalories' placeholder="Calories"/>
-          <button id="add_food_button">Add Food</button>
+        <form id='new-food' name='new_food'>
+          <label id='foodName'>
+            <input placeholder="Name of food">
+          </label>
+          <label id='foodCalories'>
+            <input placeholder="Calories">
+          </label>
+          <input type="submit">
         </form>
       </div>
   </div>
