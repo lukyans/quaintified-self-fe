@@ -9,7 +9,7 @@ By = webdriver.By
 test.describe('testing quantified-self-fe', function() {
   var driver;
 
-  //this.timeout(10000)
+  this.timeout(10000)
 
   test.beforeEach(function() {
     driver = new webdriver.Builder()
@@ -32,20 +32,19 @@ test.describe('testing quantified-self-fe', function() {
     })
   })
   test.it("adds a new food", function(){
-    var newFood = { name: "New Food", calories: 987 }
-    driver.get(`${frontEndLocation}/api/v1/foods`)
+    driver.get(`${frontEndLocation}/foods.html`)
 
-    driver.findElement({css: "foodName input"}).sendKeys("New Food")
-    driver.findElement({css: "foodCalories input"}).sendKeys(987)
+    driver.findElement({css: '#foodName input'}).sendKeys("New Food")
+    driver.findElement({css: "#foodCalories input"}).sendKeys(987)
     driver.findElement({css: "input[type=submit]"})
     .click()
 
     driver.wait(until.elementLocated({css: "food-table"}))
 
-    driver.findElement({css: "food-table"}).getText().then(function(name){
+    driver.findElement({css: "#food-table"}).getText().then(function(name){
       assert.include(name, "New Food")
     })
-    driver.findElement({css: "food-table"}).getText().then(function(data){
+    driver.findElement({css: "#food-table"}).getText().then(function(data){
       assert.include(calories, 987)
     })
   })
