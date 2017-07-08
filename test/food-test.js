@@ -1,4 +1,5 @@
 var assert    = require('chai').assert;
+var $ = require('jquery');
 var webdriver = require('selenium-webdriver');
 var until = webdriver.until;
 var test      = require('selenium-webdriver/testing');
@@ -7,7 +8,7 @@ By = webdriver.By
 
 test.describe('testing quantified-self-fe', function() {
   var driver;
-  // this is set here for scope, so we have access to it later
+
   //this.timeout(10000)
 
   test.beforeEach(function() {
@@ -28,6 +29,24 @@ test.describe('testing quantified-self-fe', function() {
       driver.findElement(By.id("food-table")).getText().then(function(foods){
         foods.includes("Pizza")
       })
+    })
+  })
+  test.it("adds a new food", function(){
+    var newFood = { name: "New Food", calories: 987 }
+    driver.get(`${frontEndLocation}/api/v1/foods`)
+
+    driver.findElement({css: "foodName input"}).sendKeys("New Food")
+    driver.findElement({css: "foodCalories input"}).sendKeys(987)
+    driver.findElement({css: "input[type=submit]"})
+    .click()
+
+    driver.wait(until.elementLocated({css: "food-table"}))
+
+    driver.findElement({css: "food-table"}).getText().then(function(name){
+      assert.include(name, "New Food")
+    })
+    driver.findElement({css: "food-table"}).getText().then(function(data){
+      assert.include(calories, 987)
     })
   })
 })
