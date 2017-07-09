@@ -2,43 +2,40 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <!-- <link rel="stylesheet" type="text/css" href="main.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="manageFoods.js"></script> -->
   <title>Quantified Self - Manage Foods</title>
 </head>
 <body>
-  <div id='center'>
-      <h1 id='page-title'>Manage Foods</h1>
+  <div>
+    <h1 class='page-title'>Manage Foods</h1>
+    <h3><a href="diary.html">Main Diary</a></h3>
+    <div class='flex-item' id="food-list">
+      <h3 class='title' align='center'>Foods</h3>
+        <table id='food-table' align='center'>
+          <tr>
+            <th>Food</th>
+            <th>Calories</th>
+            <th></th>
+          </tr>
+          <tr>
+            <td> Food did not load</td>
+            <td>Calories did not load</td>
+            <td><button type="submit" class='remove-food'>Remove</button></td>
+          </tr>
+        </table>
 
-      <div id="food-list">
-        <h3 id='title'>Foods</h3>
-          <table id='food-table' align='center'>
-            <tr>
-              <th>Food</th>
-              <th>Calories</th>
-              <th></th>
-            </tr>
-            <tr>
-              <td> Sample Food<!-- make ajax call here --></td>
-              <td>1234<!-- How to get the stuff from the db?? Food.allFoods().foreach...calories --></td>
-              <td><button type="submit" class='remove-food'>Remove</button></td>
-            </tr>
-          </table>
-
-      </div>
-      <div id="add-food">
-        <h3 id='title'>Add New Food</h3>
-        <form id='new-food' name='new_food'>
-          <label id='foodName'>
-            <input placeholder="Name of food">
-          </label>
-          <label id='foodCalories'>
-            <input placeholder="Calories">
-          </label>
-          <input type="submit">
-        </form>
-      </div>
+    </div>
+    <div class='flex-item' id="add-food" align="center">
+      <h3 class='title'>Add New Food</h3>
+      <form id='new-food' name='new_food'>
+        <label id='foodName'>
+          <input placeholder="Name of food">
+        </label>
+        <label id='foodCalories'>
+          <input placeholder="Calories">
+        </label>
+        <input type="submit">
+      </form>
+    </div>
   </div>
   <script src="main.bundle.js"></script>
 </body>
