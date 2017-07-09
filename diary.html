@@ -1,128 +1,118 @@
 <!doctype html>
 <html>
 <head>
-  <!-- <link rel="stylesheet" type="text/css" href="main.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="mainDiary.js"></script> -->
   <title>Quantified Self - Main Diary</title>
 </head>
 <body>
-  <div id='center'>
-    <h1 id='page-title'>Main Diary</h1>
-    <div align='left'>
-      <h3 id='title'>Breakfast</h3>
-      <table>
-        <tr>
-          <th>Food</th>
-          <th>Calories</th>
-          <th></th>
-        </tr>
-        <tr>
-          <td> Food blah blah blah...<!-- How to get the stuff from the db?? Food.allFoods().foreach...name --></td>
-          <td>1234<!-- How to get the stuff from the db?? Food.allFoods().foreach...calories --></td>
-          <td><button id='remove-food'>Remove</button></td>
-        </tr>
-        <tr>
-          <td> Food blah blah blah...<!-- How to get the stuff from the db?? Food.allFoods().foreach...name --></td>
-          <td>1234<!-- How to get the stuff from the db?? Food.allFoods().foreach...calories --></td>
-          <td id='table-button'><button id='remove-food'>Remove</button></td>
-        </tr>
-        <tr>
-          <td id='totals'>Total Calories</td>
-          <td id='totals'><!-- How to get the stuff from the db?? add all calories --></td>
-        </tr>
-        <tr>
-          <td id='totals'>Remaining Calories</td>
-          <td id='totals'><!-- How to get the stuff from the db?? Breakfast - num above... and then change color for negative numbers --></td>
-        </tr>
-      </table>
+  <h1 class='page-title'>Main Diary</h1>
+  <div class='flexcontainer'>
+
+    <div class='flex-item' id='meals-list'>
+      <div class='meal'>
+        <h3 class='title'>Breakfast</h3>
+        <table id='breakfast'>
+          <tr>
+            <th>Food</th>
+            <th>Calories</th>
+            <th></th>
+          </tr>
+          <tr>
+            <td id='totals'>Total Calories</td>
+            <td id='totals'></td>
+          </tr>
+          <tr>
+            <td id='totals'>Remaining Calories</td>
+            <td id='totals'></td>
+          </tr>
+        </table>
+      </div>
+      <div class='meal'>
+        <h3 class='title'>Lunch</h3>
+        <table id='lunch'>
+          <tr>
+            <th>Food</th>
+            <th>Calories</th>
+            <th></th>
+          </tr>
+          <tr>
+            <td id='totals'>Total Calories</td>
+            <td id='totals'></td>
+          </tr>
+          <tr>
+            <td id='totals'>Remaining Calories</td>
+            <td id='totals'></td>
+          </tr>
+        </table>
+      </div>
+      <div class='meal'>
+        <h3 class='title'>Dinner</h3>
+        <table id='dinner'>
+          <tr>
+            <th>Food</th>
+            <th>Calories</th>
+            <th></th>
+          </tr>
+          <tr>
+            <td id='totals'>Total Calories</td>
+            <td id='totals'></td>
+          </tr>
+          <tr>
+            <td id='totals'>Remaining Calories</td>
+            <td id='totals'></td>
+          </tr>
+        </table>
+      </div>
+      <div class='meal'>
+        <h3 class='title'>Snack</h3>
+        <table id='snack'>
+          <tr>
+            <th>Food</th>
+            <th>Calories</th>
+            <th></th>
+          </tr>
+          <tr>
+            <td id='totals'>Total Calories</td>
+            <td id='totals'></td>
+          </tr>
+          <tr>
+            <td id='totals'>Remaining Calories</td>
+            <td id='totals'></td>
+          </tr>
+        </table>
+      </div>
     </div>
-    <div align='left'>
-      <h3 id='title'>Lunch</h3>
-      <table>
-        <tr>
-          <th>Food</th>
-          <th>Calories</th>
-          <th></th>
-        </tr>
-        <tr>
-          <td> Food blah blah blah...<!-- How to get the stuff from the db?? Food.allFoods().foreach...name --></td>
-          <td>1234<!-- How to get the stuff from the db?? Food.allFoods().foreach...calories --></td>
-          <td><button id='remove-food'>Remove</button></td>
-        </tr>
-        <tr>
-          <td> Food blah blah blah...<!-- How to get the stuff from the db?? Food.allFoods().foreach...name --></td>
-          <td>1234<!-- How to get the stuff from the db?? Food.allFoods().foreach...calories --></td>
-          <td><button id='remove-food'>Remove</button></td>
-        </tr>
-        <tr>
-          <td id='totals'>Total Calories</td>
-          <td id='totals'><!-- How to get the stuff from the db?? add all calories --></td>
-        </tr>
-        <tr>
-          <td id='totals'>Remaining Calories</td>
-          <td id='totals'><!-- How to get the stuff from the db?? Lunch - num above... and then change color for negative numbers --></td>
-        </tr>
-      </table>
-    </div>
-    </div>
-    <div align='left'>
-      <h3 id='title'>Dinner</h3>
-      <table>
-        <tr>
-          <th>Food</th>
-          <th>Calories</th>
-          <th></th>
-        </tr>
-        <tr>
-          <td> Food blah blah blah...<!-- How to get the stuff from the db?? Food.allFoods().foreach...name --></td>
-          <td>1234<!-- How to get the stuff from the db?? Food.allFoods().foreach...calories --></td>
-          <td><button id='remove-food'>Remove</button></td>
-        </tr>
-        <tr>
-          <td> Food blah blah blah...<!-- How to get the stuff from the db?? Food.allFoods().foreach...name --></td>
-          <td>1234<!-- How to get the stuff from the db?? Food.allFoods().foreach...calories --></td>
-          <td id='table-button'><button id='remove-food'>Remove</button></td>
-        </tr>
-        <tr>
-          <td id='totals'>Total Calories</td>
-          <td id='totals'><!-- How to get the stuff from the db?? add all calories --></td>
-        </tr>
-        <tr>
-          <td id='totals'>Remaining Calories</td>
-          <td id='totals'><!-- How to get the stuff from the db?? Dinner - num above... and then change color for negative numbers --></td>
-        </tr>
-      </table>
-    </div>
-    <div align='left'>
-      <h3 id='title'>Snack</h3>
-      <table>
-        <tr>
-          <th>Food</th>
-          <th>Calories</th>
-          <th></th>
-        </tr>
-        <tr>
-          <td> Food blah blah blah...<!-- How to get the stuff from the db?? Food.allFoods().foreach...name --></td>
-          <td>1234<!-- How to get the stuff from the db?? Food.allFoods().foreach...calories --></td>
-          <td><button id='remove-food'>Remove</button></td>
-        </tr>
-        <tr>
-          <td> Food blah blah blah...<!-- How to get the stuff from the db?? Food.allFoods().foreach...name --></td>
-          <td>1234<!-- How to get the stuff from the db?? Food.allFoods().foreach...calories --></td>
-          <td id='table-button'><button id='remove-food'>Remove</button></td>
-        </tr>
-        <tr>
-          <td id='totals'>Total Calories</td>
-          <td id='totals'><!-- How to get the stuff from the db?? add all calories --></td>
-        </tr>
-        <tr>
-          <td id='totals'>Remaining Calories</td>
-          <td id='totals'><!-- How to get the stuff from the db?? Snack - num above... and then change color for negative numbers --></td>
-        </tr>
-      </table>
+
+    <div class=flex-item id='food-info'>
+      <div id="food-list">
+        <h3 class='title'>Foods</h3>
+          <table id='food-table'>
+            <tr>
+              <th>Food</th>
+              <th>Calories</th>
+              <th></th>
+            </tr>
+            <tr>
+              <td> Food did not load</td>
+              <td>Calories did not load</td>
+              <td><button type="submit" class='remove-food'>Remove</button></td>
+            </tr>
+          </table>
+
+      </div>
+      <div id="add-food">
+        <h3 class='title' align='center'>Add Selected Food Item to:</h3>
+          <div align="center">
+            <select id='meal-drop-down'>
+              <option value="Breakfast">Breakfast</option>
+              <option value="Lunch">Lunch</option>
+              <option value="Dinner">Dinner</option>
+              <option value="Snack">Snack</option>
+          </select>
+        </div>
+      </div>
     </div>
   </div>
+
 <script src="main.bundle.js"></script>
 </body>
 </html>

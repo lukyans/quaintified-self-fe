@@ -1,23 +1,30 @@
-#page-title {
+.flexcontainer {
+   display: -webkit-flex;
+   display: flex;
+   justify-content: center;
+}
+.page-title {
   text-align: center;
   font-family: arial, sans-serif;
   color: #112038;
 }
-#title{
+.title{
   font-family: arial, sans-serif;
   color: #112038;
 }
-#center{
-  text-align: center;
+.flex-item{
+  padding: 30px;
 }
 .remove-food{
   background-color: #d62222;
   color: white;
   border: white;
 }
-td#table-button{
-  /*border: white;*/
+#meal-drop-down{
+  width: 200px;
+  font-size: 16px;
 }
+
 td#totals{
   background-color: #bcbfc4;
   text-align: right;
