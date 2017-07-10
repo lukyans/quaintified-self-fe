@@ -9,9 +9,19 @@
     <h1 class='page-title'>Manage Foods</h1>
     <h3><a href="diary.html">Main Diary</a></h3>
     <div class='flex-item' id="food-list">
-      <h3 class='title' align='center'>Foods</h3>
+      <h2 class='title' align='center'>Foods</h2>
+      <div class='flex-item' id="add-food" align='center'>
+        <h4 class='title'>Filter by name</h4>
+        <form id='filter-by-name' name='food-filter'>
+          <label id='food-name'>
+            <input placeholder="Name of food">
+          </label>
+          <input id='filter 'type="submit">
+        </form>
+      </div>
         <table id='food-table' align='center'>
           <tr>
+            <th>CheckBox</th>
             <th>Food</th>
             <th>Calories</th>
             <th></th>

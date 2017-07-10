@@ -20,6 +20,12 @@
   color: white;
   border: white;
 }
+
+.remove-mealFood{
+  background-color: #d62222;
+  color: white;
+  border: white;
+}
 #meal-drop-down{
   width: 200px;
   font-size: 16px;
