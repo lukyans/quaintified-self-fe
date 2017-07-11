@@ -26,6 +26,11 @@
   color: white;
   border: white;
 }
+
+.negative{
+  color: red;
+}
+
 #meal-drop-down{
   width: 200px;
   font-size: 16px;
