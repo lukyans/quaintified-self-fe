@@ -5,87 +5,76 @@
 </head>
 <body>
   <h1 class='page-title'>Main Diary</h1>
-  <h3><a href="foods.html">Manage Foods</a></h3>
+  <h3><a class"create-food-button" href="foods.html">Manage Foods</a></h3>
   <div class='flexcontainer'>
 
     <div class='flex-item' id='meals-list'>
       <div class='meal'>
         <h3 class='title'>Breakfast</h3>
-        <table id='breakfast'>
+        <table id='meal-1'>
           <tr>
             <th>Food</th>
             <th>Calories</th>
             <th></th>
-          </tr>
-          <tr>
-            <td id='totals'>Total Calories</td>
-            <td id='totals'></td>
-          </tr>
-          <tr>
-            <td id='totals'>Remaining Calories</td>
-            <td id='totals'></td>
           </tr>
         </table>
       </div>
       <div class='meal'>
         <h3 class='title'>Lunch</h3>
-        <table id='lunch'>
+        <table id='meal-2'>
           <tr>
             <th>Food</th>
             <th>Calories</th>
             <th></th>
-          </tr>
-          <tr>
-            <td id='totals'>Total Calories</td>
-            <td id='totals'></td>
-          </tr>
-          <tr>
-            <td id='totals'>Remaining Calories</td>
-            <td id='totals'></td>
           </tr>
         </table>
       </div>
       <div class='meal'>
         <h3 class='title'>Dinner</h3>
-        <table id='dinner'>
+        <table id='meal-3'>
           <tr>
             <th>Food</th>
             <th>Calories</th>
             <th></th>
-          </tr>
-          <tr>
-            <td id='totals'>Total Calories</td>
-            <td id='totals'></td>
-          </tr>
-          <tr>
-            <td id='totals'>Remaining Calories</td>
-            <td id='totals'></td>
           </tr>
         </table>
       </div>
       <div class='meal'>
         <h3 class='title'>Snack</h3>
-        <table id='snack'>
+        <table id='meal-4'>
           <tr>
             <th>Food</th>
             <th>Calories</th>
             <th></th>
           </tr>
+        </table>
+      </div>
+
+      <div class='meal'>
+        <h3 class='title'>Total Calories</h3>
+        <table id='totals'>
           <tr>
-            <td id='totals'>Total Calories</td>
-            <td id='totals'></td>
+            <td id='goal'><b>Goal Calories</b></td>
+            <td id='goal-num'>3000</td>
           </tr>
           <tr>
-            <td id='totals'>Remaining Calories</td>
-            <td id='totals'></td>
+            <td id='consumed'><b>Calories Consumed</b></td>
+            <td id='consumed-num'>Number</td>
+          </tr>
+          <tr>
+            <td id='remaining'><b>Calories Remaining</b></td>
+            <td id='remaining-num'>Number</td>
           </tr>
         </table>
       </div>
+
+
     </div>
 
     <div class=flex-item id='food-info'>
       <div id="food-list">
         <h3 class='title'>Foods</h3>
+        <h3><a href="foods.html">Create New</a></h3>
           <table id='food-table-with-checkbox'>
             <tr>
               <th>Checkbox</th>
@@ -105,10 +94,10 @@
         <h3 class='title' align='center'>Add Selected Food Item to:</h3>
           <div align="center">
             <select id='meal-drop-down'>
-              <option value="Breakfast">Breakfast</option>
-              <option value="Lunch">Lunch</option>
-              <option value="Dinner">Dinner</option>
-              <option value="Snack">Snack</option>
+              <option value="1">Breakfast</option>
+              <option value="2">Lunch</option>
+              <option value="3">Dinner</option>
+              <option value="4">Snack</option>
           </select>
         </div>
       </div>
