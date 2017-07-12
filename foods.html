@@ -7,9 +7,11 @@
 <body>
   <div>
     <h1 class='page-title'>Manage Foods</h1>
-    <h3><a href="diary.html">Main Diary</a></h3>
+    <!-- <h4 class='title' align='center'><a href='diary.html'>Visit Diary Page</a></h4> -->
+    <h3 align='center'><button class='new-food-button' ><a href='diary.html'>View Diary</a></button></h3>
     <div class='flex-item' id="food-list">
       <h2 class='title' align='center'>Foods</h2>
+
       <div class='flex-item' id="add-food" align='center'>
         <h4 class='title'>Filter by name</h4>
         <form id='filter-by-name' name='food-filter'>
@@ -19,6 +21,20 @@
           <input id='filter 'type="submit">
         </form>
       </div>
+      <div id="add-food">
+        <!-- <h3 class='title' align='center'>Add Selected Food Item to:</h3> -->
+          <div align="center">
+            <select id='filter-drop-down'>
+              <option value="0">Sort by...</option>
+              <option value="1">Most Calories</option>
+              <option value="2">Least Calories</option>
+              <option value="3">Most Recently Added</option>
+              <option value="4">Oldest Added</option>
+          </select>
+        </div>
+
+      </div>
+      <div class='flex-item'>
         <table id='food-table' align='center'>
           <tr>
             <th>CheckBox</th>
@@ -32,7 +48,6 @@
             <td><button type="submit" class='remove-food'>Remove</button></td>
           </tr>
         </table>
-
     </div>
     <div class='flex-item' id="add-food" align="center">
       <h3 class='title'>Add New Food</h3>

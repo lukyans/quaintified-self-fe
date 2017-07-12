@@ -5,7 +5,6 @@
 </head>
 <body>
   <h1 class='page-title'>Main Diary</h1>
-  <h3><a class"create-food-button" href="foods.html">Manage Foods</a></h3>
   <div class='flexcontainer'>
 
     <div class='flex-item' id='meals-list'>
@@ -73,23 +72,32 @@
 
     <div class=flex-item id='food-info'>
       <div id="food-list">
-        <h3 class='title'>Foods</h3>
-        <h3><button class='new-food-button'><a href="foods.html">Create New</a></button></h3>
-          <table id='food-table-with-checkbox'>
-            <tr>
-              <th>Checkbox</th>
-              <th>Food</th>
-              <th>Calories</th>
-              <th></th>
-            </tr>
-            <tr>
-              <td> Food did not load</td>
-              <td>Calories did not load</td>
-              <td><button type="submit" class='remove-food'>Remove</button></td>
-            </tr>
-          </table>
-
+        <h3 align="center" class='title'>Foods</h3>
+        <h3 align="center"><button class='new-food-button'><a href="foods.html">Create A New Food</a></button></h3>
+        <div class='flex-item' id="add-food" align='center'>
+          <h4 class='title'>Search by name</h4>
+          <form id='search-by-name' name='food-filter'>
+            <label id='food'>
+              <input placeholder="Name of food">
+            </label>
+            <input id='search'type="submit">
+          </form>
+        </div>
+        <table id='food-table-with-checkbox'>
+          <tr>
+            <th>Checkbox</th>
+            <th>Food</th>
+            <th>Calories</th>
+            <th></th>
+          </tr>
+          <tr>
+            <td> Food did not load</td>
+            <td>Calories did not load</td>
+            <td><button type="submit" class='remove-food'>Remove</button></td>
+          </tr>
+        </table>
       </div>
+
       <div id="add-food">
         <h3 class='title' align='center'>Add Selected Food Item to:</h3>
           <div align="center">

@@ -13,7 +13,7 @@
   color: #112038;
 }
 .flex-item{
-  padding: 30px;
+  padding: 40px;
 }
 .remove-food{
   background-color: #d62222;
@@ -27,11 +27,25 @@
   border: white;
 }
 
-.create-food-button{
+.new-food-button{
+  background-color: #42b3f4;
+  font: 30px;
+  font-weight: bold;
+  border: white;
+  width: 75px;
+  height: 40px;
+}
+
+a {
+  color: black;
+  text-decoration: none;
 }
 
 .negative{
   color: red;
+}
+.positive{
+  color: #42f442;
 }
 
 #meal-drop-down{
@@ -43,10 +57,6 @@ td#totals{
   background-color: #bcbfc4;
   text-align: right;
 }
-
-/*table#meal-1 tr td:last-child {
-border: none;
-}*/
 
 td {
     border: solid #dddddd;
