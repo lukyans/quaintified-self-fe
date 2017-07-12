@@ -43,6 +43,11 @@ td#totals{
   background-color: #bcbfc4;
   text-align: right;
 }
+
+/*table#meal-1 tr td:last-child {
+border: none;
+}*/
+
 td {
     border: solid #dddddd;
     text-align: left;
