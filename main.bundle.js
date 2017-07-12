@@ -120,23 +120,6 @@
 	    allNames[i].addEventListener('blur', editName);
 	  }
 
-	  function filterFoods() {
-	    debugger;
-	    var filter = this.value.toUpperCase();
-	  }
-
-	  // function filterFoods() {
-	  //   const filter = this.value.toUpperCase()
-	  //   const foods = document.getElementsByClassName('food')
-	  //
-	  //   for(i = 0; i < foods.length; i++) {
-	  //     const foodName = foods[i].children[0].innerHTML
-	  //     const match = foodName.toUpperCase().indexOf(filter) > -1
-	  //     foods[i].style.display = match ?  "" : "none"
-	  //   }
-	  // }
-
-
 	  // function sort(){
 	  //   var sortingOptions = document.getElementById('filter-drop-down')
 	  //   var sortBy = sortingOptions.options[sortingOptions.selectedIndex].innerHTML
@@ -166,9 +149,6 @@
 	    }
 	    //Food.editCaloriesButtons(data)
 	  });
-	  // .then(fucntion(data){
-	  //   $('#filter-by-name').addEventListener('keyup', filterFoods)
-	  // })
 
 	  $('input[type=submit]').on('click', function () {
 	    event.preventDefault();
@@ -181,12 +161,19 @@
 	        allButtons[i].addEventListener('click', removeFood);
 	      }
 	    });
-	    // Meals Dropdown
-	    var sortingOptions = document.getElementById('filter-drop-down');
-	    sortingOptions.addEventListener('change', sort);
-
-	    // $('#filter-by-name').on('keyup', filterFoods)
 	  });
+	  $('#filter-by-name').on('keyup', filterFoods);
+
+	  function filterFoods() {
+	    var filter = this.value.toUpperCase();
+	    var foods = document.getElementsByClassName('food');
+
+	    for (var i = 0; i < foods.length; i++) {
+	      var foodName = foods[i].innerHTML;
+	      var matchedFilter = foodName.toUpperCase().indexOf(filter) > -1;
+	      foods[i].parentElement.style.display = matchedFilter ? "" : "none";
+	    }
+	  }
 
 	  // -----Diary Page------
 	  Food.createFoodTableWithCheckBox().then(function (foodsHTML) {
@@ -263,6 +250,10 @@
 	  var mealOptions = document.getElementById('meal-drop-down');
 	  mealOptions.addEventListener('change', addFoodToMeal);
 	});
+
+	// // sort foods list
+	// var sortingOptions = document.getElementById('filter-drop-down')
+	// sortingOptions.addEventListener('change', sort)
 
 /***/ }),
 /* 1 */
