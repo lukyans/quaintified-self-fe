@@ -93,6 +93,7 @@
 	    }).then(function (data) {
 	      Meal.createMealTable(meal_id).then(function (mealHTML) {
 	        $(`#meal-${meal_id}`).html(mealHTML);
+	        $('#food-table-with-checkbox').trigger("reset");
 	      });
 	    });
 	  });
@@ -150,6 +151,7 @@
 	    var newFood = getNewFood();
 	    newFood.createFood().then(function (completeFood) {
 	      $("#food-table").append(completeFood.toHTML());
+	      $('#new-food').trigger("reset");
 	    }).then(function (data) {
 	      var allButtons = document.getElementsByClassName("remove-food");
 	      for (var i = 0; i < allButtons.length; i++) {
