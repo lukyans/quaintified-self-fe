@@ -70,6 +70,7 @@
 	function editCalories() {
 	  var id = parseInt(this.parentElement.getAttribute("data-id"));
 	  var changedCals = this.textContent;
+	  // debugger
 	  Food.editFoodCalories(id, changedCals);
 	}
 
@@ -98,15 +99,36 @@
 	}
 
 	function removeFoodFromMeal() {
-	  mealTableId = this.parentElement.parentElement.id;
-	  meal_id = parseInt(this.parentElement.parentElement.id.split('-')[1]);
-	  food_id = parseInt(this.parentElement.getAttribute("data-id"));
+	  var mealTableId = this.parentElement.parentElement.parentElement.id;
+	  var meal_id = parseInt(this.parentElement.parentElement.parentElement.id.split('-')[1]);
+	  var food_id = parseInt(this.parentElement.parentElement.getAttribute('data-id'));
 	  $.ajax({
 	    url: `${host}/api/v1/meals/${meal_id}?food_id=${food_id}`,
 	    type: 'DELETE'
 	  });
 	  $(`#${mealTableId} tr[data-id='${food_id}']`).html("");
 	}
+
+	Food.deleteButtons = function () {
+	  var allButtons = document.getElementsByClassName("remove-food");
+	  for (var i = 0; i < allButtons.length; i++) {
+	    allButtons[i].addEventListener('click', removeFood);
+	  }
+	};
+
+	Food.editNameButtons = function () {
+	  var allNames = document.getElementsByClassName('food');
+	  for (var i = 0; i < allNames.length; i++) {
+	    allNames[i].addEventListener('blur', editName);
+	  }
+	};
+
+	// Food.editCalorieButtons = function() {
+	//   var allCals = document.getElementsByClassName('food-calories')
+	//   for(var i=0; i<allCals.length; i++){
+	//     allCals[i].addEventListener('blur', editCalories)
+	//   }
+	// }
 
 	$(function () {
 	  Food.createFoodsTable().then(function (foodsHTML) {
@@ -116,29 +138,12 @@
 	  }).then(function (data) {
 	    Food.editNameButtons(data);
 	  }).then(function (data) {
-	    Food.editCaloriesButtons(data);
-	  });
-
-	  Food.deleteButtons = function () {
-	    var allButtons = document.getElementsByClassName("remove-food");
-	    for (var i = 0; i < allButtons.length; i++) {
-	      allButtons[i].addEventListener('click', removeFood);
-	    }
-	  };
-
-	  Food.editNameButtons = function () {
-	    var allNames = document.getElementsByClassName('food');
-	    for (var i = 0; i < allNames.length; i++) {
-	      allNames[i].addEventListener('blur', editName);
-	    }
-	  };
-
-	  Food.editCalorieButtons = function () {
 	    var allCals = document.getElementsByClassName('food-calories');
 	    for (var i = 0; i < allCals.length; i++) {
 	      allCals[i].addEventListener('blur', editCalories);
 	    }
-	  };
+	    //Food.editCaloriesButtons(data)
+	  });
 
 	  $('input[type=submit]').on('click', function () {
 	    event.preventDefault();
@@ -170,7 +175,7 @@
 	  Meal.createMealTable(4).then(function (mealHTML) {
 	    $('#meal-4').html(mealHTML);
 	  }).then(function (data) {
-	    var allButtons = document.getElementsByClassName("mealFood-remove");
+	    var allButtons = document.getElementsByClassName("remove-mealFood");
 	    for (var i = 0; i < allButtons.length; i++) {
 	      allButtons[i].addEventListener('click', removeFoodFromMeal);
 	    }
@@ -189,28 +194,9 @@
 	      $("#remaining-num").addClass("negative");
 	    }
 	  });
-
 	  var mealOptions = document.getElementById('meal-drop-down');
-	  // mealOptions.on('select', addFoodToMeal) dbclick??
 	  mealOptions.addEventListener('change', addFoodToMeal);
-
-	  $('input[type=submit]').on('click', function () {
-	    event.preventDefault();
-	    var newFood = getNewFood();
-	    newFood.createFood().then(function (completeFood) {
-	      $("#food-table").append(completeFood.toHTML());
-	    }).then(function (data) {
-	      Meal.deleteButtons(data);
-	    });
-	  });
 	});
-
-	Meal.deleteButtons = function () {
-	  var allButtons = document.getElementsByClassName("remove-food");
-	  for (var i = 0; i < allButtons.length; i++) {
-	    allButtons[i].addEventListener('click', removeFood);
-	  }
-	};
 
 /***/ }),
 /* 1 */
@@ -592,14 +578,14 @@
 	Food.prototype.toHTMLWithCheckbox = function () {
 	  return `<tr data-id=${this.id}>
 	              <td class='checkbox'><input type="checkbox"></td>
-	              <td class='food' input type="text" contenteditable='true'>${this.name}</td>
-	              <td class='food-calories' input type="number" contenteditable='true'>${this.calories}</td>
+	              <td class='food'>${this.name}</td>
+	              <td class='food-calories'>${this.calories}</td>
 	          </tr>`;
 	};
 	Food.prototype.mealFoodToHTML = function (food_id) {
-	  return `<tr data-id=${food_id}>
-	              <td class='mealFood' input type="text" contenteditable='true'>${this.name}</td>
-	              <td class='mealFood-calories' input type="number" contenteditable='true'>${this.calories}</td>
+	  return `<tr data-id=${this.id}>
+	              <td class='mealFood'>${this.name}</td>
+	              <td class='mealFood-calories'>${this.calories}</td>
 	              <td class='mealFood-remove'><button class='remove-mealFood'>Remove</button></td>
 	          </tr>`;
 	};
@@ -618,7 +604,7 @@
 	    type: 'PUT',
 	    data: { name: newName }
 	  });
-	  $(`tr[data-id='${id}'].children[0]`).val(`${changedName}`);
+	  $(`tr[data-id='${id}'].children[0]`).val(`${newName}`);
 	};
 
 	Food.editFoodCalories = function (id, newCalories) {
@@ -627,7 +613,7 @@
 	    type: 'PUT',
 	    data: { calories: newCalories }
 	  });
-	  $(`tr[data-id='${id}'].children[1]`).val(`${changedCals}`);
+	  $(`tr[data-id='${id}'].children[1]`).val(`${newCalories}`);
 	};
 
 	Food.deleteFood = function (id) {
