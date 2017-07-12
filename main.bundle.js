@@ -186,6 +186,7 @@
 	      totalConsumed += parseInt(allCalories[i].innerHTML);
 	    }
 
+	    // Total Calories Table
 	    $('#consumed-num').html(`${totalConsumed}`);
 	    $('#remaining-num').html(`${3000 - totalConsumed}`);
 	    var calCount = $('#remaining-num').text();
@@ -194,6 +195,11 @@
 	      $("#remaining-num").addClass("negative");
 	    }
 	  });
+
+	  // Calories on a table
+	  // $('<tr><td>Total Calories</td><td id="breakfast-total">9876</td></tr>').appendTo("#meal-1")
+
+	  // Meals Dropdown
 	  var mealOptions = document.getElementById('meal-drop-down');
 	  mealOptions.addEventListener('change', addFoodToMeal);
 	});
@@ -633,14 +639,22 @@
 	};
 
 	Food.createFoodsTable = function () {
-	  return this.getAllFoods().then(function (foods) {
-	    return foods.map(function (food) {
-	      return new Food(food);
-	    });
-	  }).then(function (foods) {
-	    return foods.map(function (food) {
-	      return food.toHTML();
-	    });
+	  return this.buildFoodsTable(this.getAllFoods());
+	};
+
+	Food.buildFoodsTable = function (APIResponse) {
+	  return APIResponse.then(Food.createFoodsObjects).then(Food.includeFoodsToTable);
+	};
+
+	Food.createFoodsObjects = function (foods) {
+	  return foods.map(function (food) {
+	    return new Food(food);
+	  });
+	};
+
+	Food.includeFoodsToTable = function (foods) {
+	  return foods.map(function (food) {
+	    return food.toHTML();
 	  });
 	};
 
