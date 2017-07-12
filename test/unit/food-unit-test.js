@@ -26,14 +26,20 @@ describe('Food', function() {
   })
 
   it("creates food objects", function(done) {
-    this.timeout(100000)
-    var foods = [new Food(
-      { id: 1, name: "yogurt", calories: 100 }),
-      new Food ({ id: 2, name: "poptart", calories: 200 })
-    ]
-//eval(pry.it)
+    var foods = [new Food({ id: 1, name: "yogurt", calories: 100 }),
+                 new Food ({ id: 2, name: "poptart", calories: 200 })
+                ]
   var foodsArray = Food.createFoodsObjects(foods)
   assert.equal(foodsArray.length, 2)
   done()
+  })
+
+  it("adds foods to a table", function(done){
+    var foods = [ new Food ({ id: 1, name: "yogurt", calories: 100 }),
+                  new Food ({ id: 2, name: "poptart", calories: 200 } )
+                ]
+    var foodsHTML = Food.includeFoodsToTable(foods)
+    foodsHTML.includes('yogurt')
+    done()
   })
 })
