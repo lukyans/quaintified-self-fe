@@ -45,86 +45,100 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	const Food = __webpack_require__(5);
+	var host = __webpack_require__(5).host;
+	const Food = __webpack_require__(6);
 	const Meal = __webpack_require__(8);
-	const $ = __webpack_require__(6);
+	const $ = __webpack_require__(7);
 
 	function getNewFood() {
 	  var name = $('#foodName input').val();
 	  var calories = $('#foodCalories input').val();
-
 	  return new Food({ name: name, calories: calories });
 	}
 
 	function removeFood() {
 	  var id = parseInt(this.parentElement.parentElement.getAttribute("data-id"));
-	  Food.findFood(id).then(function (food) {
-	    $.ajax({
-	      url: `http://localhost:3000/api/v1/foods/${food.id}`,
-	      type: 'DELETE'
-	    });
-	    $(`tr[data-id='${id}']`).html("");
-	  });
+	  Food.deleteFood(id);
 	}
 
 	function editName() {
 	  var id = parseInt(this.parentElement.getAttribute("data-id"));
 	  var changedName = this.textContent;
-	  Food.findFood(id).then(function (food) {
-	    $.ajax({
-	      url: `http://localhost:3000/api/v1/foods/${food.id}`,
-	      type: 'PUT',
-	      data: { name: changedName }
-	    });
-	    $(`tr[data-id='${id}'].children[0]`).val(`${changedName}`);
-	  });
+	  Food.editFoodName(id, changedName);
 	}
+
 	function editCalories() {
 	  var id = parseInt(this.parentElement.getAttribute("data-id"));
 	  var changedCals = this.textContent;
-	  Food.findFood(id).then(function (food) {
+	  Food.editFoodCalories(id, changedCals);
+	}
+
+	function addFoodToMeal() {
+	  var checkedBoxes = $('.checkbox').children('input:checked');
+	  var food_ids = [];
+	  for (var i = 0; i < checkedBoxes.length; i++) {
+	    food_ids.push(parseInt(checkedBoxes[i].parentElement.parentElement.getAttribute('data-id')));
+	  }
+	  var meals = document.getElementById('meal-drop-down');
+	  var meal_id = parseInt(meals.options[meals.selectedIndex].value);
+	  food_ids.forEach(function (food_id) {
 	    $.ajax({
-	      url: `http://localhost:3000/api/v1/foods/${food.id}`,
-	      type: 'PUT',
-	      data: { calories: changedCals }
+	      url: `${host}/api/v1/meals/${meal_id}?food_id=${food_id}`,
+	      type: 'POST',
+	      success: function (data) {},
+	      error: function (data) {
+	        console.log('error');
+	      }
+	    }).then(function (data) {
+	      Meal.createMealTable(meal_id).then(function (mealHTML) {
+	        $(`#meal-${meal_id}`).html(mealHTML);
+	      });
 	    });
-	    $(`tr[data-id='${id}'].children[1]`).val(`${changedCals}`);
 	  });
+	}
+
+	function removeFoodFromMeal() {
+	  mealTableId = this.parentElement.parentElement.id;
+	  meal_id = parseInt(this.parentElement.parentElement.id.split('-')[1]);
+	  food_id = parseInt(this.parentElement.getAttribute("data-id"));
+	  $.ajax({
+	    url: `${host}/api/v1/meals/${meal_id}?food_id=${food_id}`,
+	    type: 'DELETE'
+	  });
+	  $(`#${mealTableId} tr[data-id='${food_id}']`).html("");
 	}
 
 	$(function () {
 	  Food.createFoodsTable().then(function (foodsHTML) {
 	    $('#food-table').html(foodsHTML);
 	  }).then(function (data) {
-	    var allButtons = document.getElementsByClassName("remove-food");
+	    Food.deleteButtons(data);
+	  }).then(function (data) {
+	    Food.editNameButtons(data);
+	  }).then(function (data) {
+	    Food.editCaloriesButtons(data);
+	  });
 
+	  Food.deleteButtons = function () {
+	    var allButtons = document.getElementsByClassName("remove-food");
 	    for (var i = 0; i < allButtons.length; i++) {
 	      allButtons[i].addEventListener('click', removeFood);
 	    }
-	  }).then(function (data) {
+	  };
+
+	  Food.editNameButtons = function () {
 	    var allNames = document.getElementsByClassName('food');
 	    for (var i = 0; i < allNames.length; i++) {
 	      allNames[i].addEventListener('blur', editName);
 	    }
-	  }).then(function (data) {
+	  };
+
+	  Food.editCalorieButtons = function () {
 	    var allCals = document.getElementsByClassName('food-calories');
 	    for (var i = 0; i < allCals.length; i++) {
 	      allCals[i].addEventListener('blur', editCalories);
 	    }
-	  });
-
-	  Meal.createMealTable(1).then(function (mealHTML) {
-	    $('#breakfast').html(mealHTML);
-	  });
-	  Meal.createMealTable(2).then(function (mealHTML) {
-	    $('#lunch').html(mealHTML);
-	  });
-	  Meal.createMealTable(3).then(function (mealHTML) {
-	    $('#dinner').html(mealHTML);
-	  });
-	  Meal.createMealTable(4).then(function (mealHTML) {
-	    $('#snack').html(mealHTML);
-	  });
+	  };
 
 	  $('input[type=submit]').on('click', function () {
 	    event.preventDefault();
@@ -136,18 +150,67 @@
 	      for (var i = 0; i < allButtons.length; i++) {
 	        allButtons[i].addEventListener('click', removeFood);
 	      }
-	      // }).then(function(data){
-	      //   var allCals = document.getElementsByClassName('food-calories')
-	      //   for(var i=0; i<allCals.length; i++){
-	      //     allCals[i].addEventListener('blur', editCalories)
-	      //   }
-	      // })
 	    });
 	  });
-	  // var length = $("#food-table").children.length) - 1
-	  // $("#food-table").children[length].children[2].children[0]
-	  // $('#food-table').children[2].children[0].addEventListener('click', removeFood)
+
+	  // Diary Page
+	  Food.createFoodTableWithCheckBox().then(function (foodsHTML) {
+	    $('#food-table-with-checkbox').html(foodsHTML);
+	  });
+
+	  Meal.createMealTable(1).then(function (mealHTML) {
+	    $('#meal-1').html(mealHTML);
+	  });
+	  Meal.createMealTable(2).then(function (mealHTML) {
+	    $('#meal-2').html(mealHTML);
+	  });
+	  Meal.createMealTable(3).then(function (mealHTML) {
+	    $('#meal-3').html(mealHTML);
+	  });
+	  Meal.createMealTable(4).then(function (mealHTML) {
+	    $('#meal-4').html(mealHTML);
+	  }).then(function (data) {
+	    var allButtons = document.getElementsByClassName("mealFood-remove");
+	    for (var i = 0; i < allButtons.length; i++) {
+	      allButtons[i].addEventListener('click', removeFoodFromMeal);
+	    }
+	  }).then(function (data) {
+	    var totalConsumed = 0;
+	    var allCalories = document.getElementsByClassName("mealFood-calories");
+	    for (var i = 0; i < allCalories.length; i++) {
+	      totalConsumed += parseInt(allCalories[i].innerHTML);
+	    }
+
+	    $('#consumed-num').html(`${totalConsumed}`);
+	    $('#remaining-num').html(`${3000 - totalConsumed}`);
+	    var calCount = $('#remaining-num').text();
+
+	    if (calCount.includes('-')) {
+	      $("#remaining-num").addClass("negative");
+	    }
+	  });
+
+	  var mealOptions = document.getElementById('meal-drop-down');
+	  // mealOptions.on('select', addFoodToMeal) dbclick??
+	  mealOptions.addEventListener('change', addFoodToMeal);
+
+	  $('input[type=submit]').on('click', function () {
+	    event.preventDefault();
+	    var newFood = getNewFood();
+	    newFood.createFood().then(function (completeFood) {
+	      $("#food-table").append(completeFood.toHTML());
+	    }).then(function (data) {
+	      Meal.deleteButtons(data);
+	    });
+	  });
 	});
+
+	Meal.deleteButtons = function () {
+	  var allButtons = document.getElementsByClassName("remove-food");
+	  for (var i = 0; i < allButtons.length; i++) {
+	    allButtons[i].addEventListener('click', removeFood);
+	  }
+	};
 
 /***/ }),
 /* 1 */
@@ -184,7 +247,7 @@
 
 
 	// module
-	exports.push([module.id, ".flexcontainer {\n   display: -webkit-flex;\n   display: flex;\n   justify-content: center;\n}\n.page-title {\n  text-align: center;\n  font-family: arial, sans-serif;\n  color: #112038;\n}\n.title{\n  font-family: arial, sans-serif;\n  color: #112038;\n}\n.flex-item{\n  padding: 30px;\n}\n.remove-food{\n  background-color: #d62222;\n  color: white;\n  border: white;\n}\n#meal-drop-down{\n  width: 200px;\n  font-size: 16px;\n}\n\ntd#totals{\n  background-color: #bcbfc4;\n  text-align: right;\n}\ntd {\n    border: solid #dddddd;\n    text-align: left;\n    padding: 8px;\n    font-family: arial, sans-serif;\n    color: #39547f;\n    font: 10px;\n}\n\nth {\n  text-align: center;\n  font: 15px bold;\n  font-family: arial, sans-serif;\n  color: #112038;\n  background-color: #bcbfc4;\n\n}\n\ntable {\n    align-self: center;\n    border-collapse: collapse;\n    /*width: 80%;*/\n    font-family: arial, sans-serif;\n}\n", ""]);
+	exports.push([module.id, ".flexcontainer {\n   display: -webkit-flex;\n   display: flex;\n   justify-content: center;\n}\n.page-title {\n  text-align: center;\n  font-family: arial, sans-serif;\n  color: #112038;\n}\n.title{\n  font-family: arial, sans-serif;\n  color: #112038;\n}\n.flex-item{\n  padding: 30px;\n}\n.remove-food{\n  background-color: #d62222;\n  color: white;\n  border: white;\n}\n\n.remove-mealFood{\n  background-color: #d62222;\n  color: white;\n  border: white;\n}\n\n.create-food-button{\n}\n\n.negative{\n  color: red;\n}\n\n#meal-drop-down{\n  width: 200px;\n  font-size: 16px;\n}\n\ntd#totals{\n  background-color: #bcbfc4;\n  text-align: right;\n}\ntd {\n    border: solid #dddddd;\n    text-align: left;\n    padding: 8px;\n    font-family: arial, sans-serif;\n    color: #39547f;\n    font: 10px;\n}\n\nth {\n  text-align: center;\n  font: 15px bold;\n  font-family: arial, sans-serif;\n  color: #112038;\n  background-color: #bcbfc4;\n\n}\n\ntable {\n    align-self: center;\n    border-collapse: collapse;\n    /*width: 80%;*/\n    font-family: arial, sans-serif;\n}\n", ""]);
 
 	// exports
 
@@ -499,10 +562,18 @@
 
 /***/ }),
 /* 5 */
+/***/ (function(module, exports) {
+
+	module.exports = {
+	  host: 'http://quantified-self-1701.herokuapp.com'
+	};
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var $ = __webpack_require__(6);
-	var host = __webpack_require__(7).host;
+	var $ = __webpack_require__(7);
+	var host = __webpack_require__(5).host;
 
 	function Food(food) {
 	  this.id = food.id;
@@ -518,36 +589,53 @@
 	              <td class='food-remove'><button class='remove-food'>Remove</button></td>
 	          </tr>`;
 	};
+	Food.prototype.toHTMLWithCheckbox = function () {
+	  return `<tr data-id=${this.id}>
+	              <td class='checkbox'><input type="checkbox"></td>
+	              <td class='food' input type="text" contenteditable='true'>${this.name}</td>
+	              <td class='food-calories' input type="number" contenteditable='true'>${this.calories}</td>
+	          </tr>`;
+	};
+	Food.prototype.mealFoodToHTML = function (food_id) {
+	  return `<tr data-id=${food_id}>
+	              <td class='mealFood' input type="text" contenteditable='true'>${this.name}</td>
+	              <td class='mealFood-calories' input type="number" contenteditable='true'>${this.calories}</td>
+	              <td class='mealFood-remove'><button class='remove-mealFood'>Remove</button></td>
+	          </tr>`;
+	};
 
 	Food.prototype.createFood = function () {
-	  return $.post(`${host}/api/v1/foods`, { name: this.name, calories: this.calories }).then(function (foodObject) {
+	  return $.post(`${host}/api/v1/foods`, { name: this.name, calories: this.calories }).fail(function () {
+	    alert("A food item needs a name and calories");
+	  }).then(function (foodObject) {
 	    return new Food(foodObject);
 	  });
 	};
 
-	Food.prototype.editFoodName = function (id, newName) {
-	  return $.ajax({
+	Food.editFoodName = function (id, newName) {
+	  $.ajax({
 	    url: `${host}/api/v1/foods/${id}`,
-	    method: 'PUT',
-	    dataType: 'json',
+	    type: 'PUT',
 	    data: { name: newName }
 	  });
+	  $(`tr[data-id='${id}'].children[0]`).val(`${changedName}`);
 	};
 
-	Food.prototype.editFoodCalories = function (id, newCalories) {
-	  return $.ajax({
+	Food.editFoodCalories = function (id, newCalories) {
+	  $.ajax({
 	    url: `${host}/api/v1/foods/${id}`,
-	    method: 'PUT',
-	    dataType: 'json',
+	    type: 'PUT',
 	    data: { calories: newCalories }
 	  });
+	  $(`tr[data-id='${id}'].children[1]`).val(`${changedCals}`);
 	};
 
-	Food.prototype.deleteFood = function () {
-	  return $.ajax({
-	    url: `${host}/api/v1/foods/${this.id}`,
-	    method: 'DELETE'
+	Food.deleteFood = function (id) {
+	  $.ajax({
+	    url: `${host}/api/v1/foods/${id}`,
+	    type: 'DELETE'
 	  });
+	  $(`tr[data-id='${id}']`).html("");
 	};
 
 	Food.getAllFoods = function () {
@@ -570,10 +658,22 @@
 	  });
 	};
 
+	Food.createFoodTableWithCheckBox = function () {
+	  return this.getAllFoods().then(function (foods) {
+	    return foods.map(function (food) {
+	      return new Food(food);
+	    });
+	  }).then(function (foods) {
+	    return foods.map(function (food) {
+	      return food.toHTMLWithCheckbox();
+	    });
+	  });
+	};
+
 	module.exports = Food;
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10832,20 +10932,12 @@
 
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-	module.exports = {
-	  host: 'http://localhost:3000'
-	};
-
-/***/ }),
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var $ = __webpack_require__(6);
-	var host = __webpack_require__(7).host;
-	const Food = __webpack_require__(5);
+	var $ = __webpack_require__(7);
+	var host = __webpack_require__(5).host;
+	const Food = __webpack_require__(6);
 
 	function Meal(meal) {
 	  this.id = meal.id;
@@ -10863,15 +10955,22 @@
 	};
 
 	Meal.createMealTable = function (id) {
-	  return this.findMeal(id).then(function (meal) {
-	    var foods = meal.foods;
-	    return foods.map(function (food) {
-	      return new Food(food);
-	    });
-	  }).then(function (foods) {
-	    return foods.map(function (food) {
-	      return food.toHTML();
-	    });
+	  return this.buildMealTable(this.findMeal(id));
+	};
+
+	Meal.buildMealTable = function (APIResponse) {
+	  return APIResponse.then(Meal.createFoodsObjects).then(Meal.includeFoodsToMeals);
+	};
+
+	Meal.createFoodsObjects = function (meal) {
+	  return meal.foods.map(function (food) {
+	    return new Food(food);
+	  });
+	};
+
+	Meal.includeFoodsToMeals = function (foods) {
+	  return foods.map(function (food) {
+	    return food.mealFoodToHTML();
 	  });
 	};
 
