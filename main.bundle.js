@@ -70,7 +70,6 @@
 	function editCalories() {
 	  var id = parseInt(this.parentElement.getAttribute("data-id"));
 	  var changedCals = this.textContent;
-	  // debugger
 	  Food.editFoodCalories(id, changedCals);
 	}
 
@@ -93,7 +92,6 @@
 	    }).then(function (data) {
 	      Meal.createMealTable(meal_id).then(function (mealHTML) {
 	        $(`#meal-${meal_id}`).html(mealHTML);
-	        $('#food-table-with-checkbox').trigger("reset");
 	      });
 	    });
 	  });
@@ -116,12 +114,18 @@
 	    allButtons[i].addEventListener('click', removeFood);
 	  }
 	};
-
 	Food.editNameButtons = function () {
 	  var allNames = document.getElementsByClassName('food');
 	  for (var i = 0; i < allNames.length; i++) {
 	    allNames[i].addEventListener('blur', editName);
 	  }
+
+	  // function sort(){
+	  //   var sortingOptions = document.getElementById('filter-drop-down')
+	  //   var sortBy = sortingOptions.options[sortingOptions.selectedIndex].innerHTML
+	  //
+	  //   // Food.create the foods table by asc or desc cals/created_at
+	  // }
 	};
 
 	// Food.editCalorieButtons = function() {
@@ -151,7 +155,6 @@
 	    var newFood = getNewFood();
 	    newFood.createFood().then(function (completeFood) {
 	      $("#food-table").append(completeFood.toHTML());
-	      $('#new-food').trigger("reset");
 	    }).then(function (data) {
 	      var allButtons = document.getElementsByClassName("remove-food");
 	      for (var i = 0; i < allButtons.length; i++) {
@@ -159,8 +162,20 @@
 	      }
 	    });
 	  });
+	  $('#filter-by-name').on('keyup', filterFoods);
 
-	  // Diary Page
+	  function filterFoods() {
+	    var filter = this.value.toUpperCase();
+	    var foods = document.getElementsByClassName('food');
+
+	    for (var i = 0; i < foods.length; i++) {
+	      var foodName = foods[i].innerHTML;
+	      var matchedFilter = foodName.toUpperCase().indexOf(filter) > -1;
+	      foods[i].parentElement.style.display = matchedFilter ? "" : "none";
+	    }
+	  }
+
+	  // -----Diary Page------
 	  Food.createFoodTableWithCheckBox().then(function (foodsHTML) {
 	    $('#food-table-with-checkbox').html(foodsHTML);
 	  });
@@ -182,29 +197,63 @@
 	      allButtons[i].addEventListener('click', removeFoodFromMeal);
 	    }
 	  }).then(function (data) {
+	    //  Calorie Data on Meal Tables
+	    $('<tr><td><b>Total Calories</b></td><td colspan="2" id="breakfast-total"><b>400<b></td></tr>').appendTo("#meal-1");
+	    $('<tr><td><b>Remaining Calories</b></td><td colspan="2" id="breakfast-remaining"></td></tr>').appendTo("#meal-1");
+	    $('<tr><<td><b>Total Calories</b></td><td colspan="2" id="lunch-total"><b>600</b></td></tr>').appendTo("#meal-2");
+	    $('<tr><td><b>Remaining Calories</b></td><td colspan="2" id="lunch-remaining"></td></tr>').appendTo("#meal-2");
+	    $('<tr><td><b>Total Calories</b></td><td colspan="2" id="dinner-total"><b>800</b></td></tr>').appendTo("#meal-3");
+	    $('<tr><td><b>Remaining Calories</b></td><td colspan="2" id="dinner-remaining"></td></tr>').appendTo("#meal-3");
+	    $('<tr><td><b>Total Calories</b></td><td colspan="2" id="snack-total"><b>200</b></td></tr>').appendTo("#meal-4");
+	    $('<tr><td><b>Remaining Calories</b></td><td colspan="2" id="snack-remaining"></td></tr>').appendTo("#meal-4");
+	  }).then(function (data) {
+
+	    // Meal Table Calories
+	    const mealsCalories = { "breakfast": { index: 1, calories: 400 },
+	      "lunch": { index: 2, calories: 460 },
+	      "dinner": { index: 3, calories: 800 },
+	      "snack": { index: 4, calories: 200 }
+	    };
+	    Object.keys(mealsCalories).forEach(function (meal) {
+	      var { index, calories } = mealsCalories[meal];
+	      var consumed = 0;
+	      var cals = document.getElementById(`meal-${index}`).children;
+	      for (var i = 0; i < cals.length - 2; i++) {
+	        consumed += parseInt(cals[i].children[1].innerHTML);
+	      }
+	      $(`#${meal}-total`).html(`${consumed} of ${calories}`);
+	      $(`#${meal}-remaining`).html(`${calories - consumed}`);
+
+	      var count = $(`#${meal}-remaining`)[0].innerHTML;
+	      var colorClass = count.includes('-') ? "negative" : "positive";
+	      $(`#${meal}-remaining`).addClass(colorClass);
+	    });
+
+	    // Total Calories Table
 	    var totalConsumed = 0;
 	    var allCalories = document.getElementsByClassName("mealFood-calories");
+	    // debugger
 	    for (var i = 0; i < allCalories.length; i++) {
 	      totalConsumed += parseInt(allCalories[i].innerHTML);
 	    }
-
-	    // Total Calories Table
 	    $('#consumed-num').html(`${totalConsumed}`);
-	    $('#remaining-num').html(`${3000 - totalConsumed}`);
+	    $('#remaining-num').html(`${2000 - totalConsumed}`);
 	    var calCount = $('#remaining-num').text();
 
 	    if (calCount.includes('-')) {
 	      $("#remaining-num").addClass("negative");
+	    } else {
+	      $("#remaining-num").addClass("positive");
 	    }
 	  });
-
-	  // Calories on a table
-	  // $('<tr><td>Total Calories</td><td id="breakfast-total">9876</td></tr>').appendTo("#meal-1")
-
 	  // Meals Dropdown
 	  var mealOptions = document.getElementById('meal-drop-down');
 	  mealOptions.addEventListener('change', addFoodToMeal);
 	});
+
+	// // sort foods list
+	// var sortingOptions = document.getElementById('filter-drop-down')
+	// sortingOptions.addEventListener('change', sort)
 
 /***/ }),
 /* 1 */
@@ -241,7 +290,7 @@
 
 
 	// module
-	exports.push([module.id, ".flexcontainer {\n   display: -webkit-flex;\n   display: flex;\n   justify-content: center;\n}\n.page-title {\n  text-align: center;\n  font-family: arial, sans-serif;\n  color: #112038;\n}\n.title{\n  font-family: arial, sans-serif;\n  color: #112038;\n}\n.flex-item{\n  padding: 30px;\n}\n.remove-food{\n  background-color: #d62222;\n  color: white;\n  border: white;\n}\n\n.remove-mealFood{\n  background-color: #d62222;\n  color: white;\n  border: white;\n}\n\n.create-food-button{\n}\n\n.negative{\n  color: red;\n}\n\n#meal-drop-down{\n  width: 200px;\n  font-size: 16px;\n}\n\ntd#totals{\n  background-color: #bcbfc4;\n  text-align: right;\n}\ntd {\n    border: solid #dddddd;\n    text-align: left;\n    padding: 8px;\n    font-family: arial, sans-serif;\n    color: #39547f;\n    font: 10px;\n}\n\nth {\n  text-align: center;\n  font: 15px bold;\n  font-family: arial, sans-serif;\n  color: #112038;\n  background-color: #bcbfc4;\n\n}\n\ntable {\n    align-self: center;\n    border-collapse: collapse;\n    /*width: 80%;*/\n    font-family: arial, sans-serif;\n}\n", ""]);
+	exports.push([module.id, ".flexcontainer {\n   display: -webkit-flex;\n   display: flex;\n   justify-content: center;\n}\n.page-title {\n  text-align: center;\n  font-family: arial, sans-serif;\n  color: #112038;\n}\n.title{\n  font-family: arial, sans-serif;\n  color: #112038;\n}\n.flex-item{\n  padding: 40px;\n}\n.remove-food{\n  background-color: #d62222;\n  color: white;\n  border: white;\n}\n\n.remove-mealFood{\n  background-color: #d62222;\n  color: white;\n  border: white;\n}\n\n.new-food-button{\n  background-color: #42b3f4;\n  font: 30px;\n  font-weight: bold;\n  border: white;\n  width: 75px;\n  height: 40px;\n}\n\na {\n  color: black;\n  text-decoration: none;\n}\n\n.negative{\n  color: red;\n}\n.positive{\n  color: #42f442;\n}\n\n#meal-drop-down{\n  width: 200px;\n  font-size: 16px;\n}\n\ntd#totals{\n  background-color: #bcbfc4;\n  text-align: right;\n}\n\ntd {\n    border: solid #dddddd;\n    text-align: left;\n    padding: 8px;\n    font-family: arial, sans-serif;\n    color: #39547f;\n    font: 10px;\n}\n\nth {\n  text-align: center;\n  font: 15px bold;\n  font-family: arial, sans-serif;\n  color: #112038;\n  background-color: #bcbfc4;\n\n}\n\ntable {\n    align-self: center;\n    border-collapse: collapse;\n    /*width: 80%;*/\n    font-family: arial, sans-serif;\n}\n", ""]);
 
 	// exports
 
