@@ -119,13 +119,6 @@
 	  for (var i = 0; i < allNames.length; i++) {
 	    allNames[i].addEventListener('blur', editName);
 	  }
-
-	  // function sort(){
-	  //   var sortingOptions = document.getElementById('filter-drop-down')
-	  //   var sortBy = sortingOptions.options[sortingOptions.selectedIndex].innerHTML
-	  //
-	  //   // Food.create the foods table by asc or desc cals/created_at
-	  // }
 	};
 
 	// Food.editCalorieButtons = function() {
@@ -174,6 +167,8 @@
 	      foods[i].parentElement.style.display = matchedFilter ? "" : "none";
 	    }
 	  }
+	  ///////////////////////////////////
+
 
 	  // -----Diary Page------
 	  Food.createFoodTableWithCheckBox().then(function (foodsHTML) {
@@ -232,7 +227,6 @@
 	    // Total Calories Table
 	    var totalConsumed = 0;
 	    var allCalories = document.getElementsByClassName("mealFood-calories");
-	    // debugger
 	    for (var i = 0; i < allCalories.length; i++) {
 	      totalConsumed += parseInt(allCalories[i].innerHTML);
 	    }
@@ -254,6 +248,13 @@
 	// // sort foods list
 	// var sortingOptions = document.getElementById('filter-drop-down')
 	// sortingOptions.addEventListener('change', sort)
+
+
+	$("#sort-drop-down").addEventListener("change", sortFoodTable);
+	function sortFoodTable() {
+	  debugger;
+	  sorterMethod = this.value;
+	}
 
 /***/ }),
 /* 1 */
