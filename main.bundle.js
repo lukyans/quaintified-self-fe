@@ -92,6 +92,12 @@
 	    }).then(function (data) {
 	      Meal.createMealTable(meal_id).then(function (mealHTML) {
 	        $(`#meal-${meal_id}`).html(mealHTML);
+	        var checkedBoxes = $('.checkbox').children('input:checked');
+	        for (var i = 0; i < checkedBoxes.length; i++) {
+	          checkedBoxes[i].checked = false;
+	        }
+	        //  $('#meal-drop-down').trigger("reset")
+	        $('#meal-drop-down').get(0).selectedIndex = 0;
 	      }).then(function (data) {
 	        var cals;
 	        if (meal_id == 1) {
@@ -280,6 +286,7 @@
 	      for (var i = 0; i < allButtons.length; i++) {
 	        allButtons[i].addEventListener('click', removeFood);
 	      }
+	      $('#new-food').trigger("reset");
 	    });
 	  });
 
@@ -696,7 +703,7 @@
 /***/ (function(module, exports) {
 
 	module.exports = {
-	  host: 'http://quantified-self-1701.herokuapp.com'
+	  host: 'https://quantified-self-1701.herokuapp.com'
 	};
 
 /***/ }),
