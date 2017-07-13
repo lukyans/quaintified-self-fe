@@ -121,13 +121,6 @@
 	  }
 	};
 
-	// Food.editCalorieButtons = function() {
-	//   var allCals = document.getElementsByClassName('food-calories')
-	//   for(var i=0; i<allCals.length; i++){
-	//     allCals[i].addEventListener('blur', editCalories)
-	//   }
-	// }
-
 	$(function () {
 	  Food.createFoodsTable().then(function (foodsHTML) {
 	    $('#food-table').html(foodsHTML);
@@ -140,7 +133,6 @@
 	    for (var i = 0; i < allCals.length; i++) {
 	      allCals[i].addEventListener('blur', editCalories);
 	    }
-	    //Food.editCaloriesButtons(data)
 	  });
 
 	  $('input[type=submit]').on('click', function () {
@@ -167,8 +159,94 @@
 	      foods[i].parentElement.style.display = matchedFilter ? "" : "none";
 	    }
 	  }
-	  ///////////////////////////////////
 
+	  //Food sorter
+	  function sortFoodTable() {
+	    var sorters = $('#sort-drop-down').children();
+	    for (var i = 0; i < sorters.length; i++) {
+	      if (sorters[i].selected) {
+	        someSortingMethod(sorters[i].value);
+	      }
+	    }
+	  }
+	  function someSortingMethod(num) {
+	    if (num == 1) {
+	      return sortByName();
+	    } else if (num == 2) {
+	      return sortByMostCalories();
+	    } else {
+	      return sortByLeastCalories();
+	    }
+	  }
+
+	  function sortByName() {
+	    var table, rows, switching, i, x, y, shouldSwitch;
+	    table = document.getElementById("food-table");
+	    switching = true;
+	    while (switching) {
+	      switching = false;
+	      rows = table.getElementsByTagName("TR");
+	      for (i = 1; i < rows.length - 1; i++) {
+	        shouldSwitch = false;
+	        x = rows[i].getElementsByTagName("TD")[0];
+	        y = rows[i + 1].getElementsByTagName("TD")[0];
+	        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+	          shouldSwitch = true;
+	          break;
+	        }
+	      }
+	      if (shouldSwitch) {
+	        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+	        switching = true;
+	      }
+	    }
+	  }
+
+	  function sortByMostCalories() {
+	    var table, rows, switching, i, x, y, shouldSwitch;
+	    table = document.getElementById("food-table");
+	    switching = true;
+	    while (switching) {
+	      switching = false;
+	      rows = table.getElementsByTagName("TR");
+	      for (i = 0; i < rows.length - 1; i++) {
+	        shouldSwitch = false;
+	        x = parseInt(rows[i].cells[1].innerText);
+	        y = parseInt(rows[i + 1].cells[1].innerText);
+	        if (x < y) {
+	          shouldSwitch = true;
+	          break;
+	        }
+	      }
+	      if (shouldSwitch) {
+	        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+	        switching = true;
+	      }
+	    }
+	  }
+
+	  function sortByLeastCalories() {
+	    var table, rows, switching, i, x, y, shouldSwitch;
+	    table = document.getElementById("food-table");
+	    switching = true;
+	    while (switching) {
+	      switching = false;
+	      rows = table.getElementsByTagName("TR");
+	      for (i = 0; i < rows.length - 1; i++) {
+	        shouldSwitch = false;
+	        x = parseInt(rows[i].cells[1].innerText);
+	        y = parseInt(rows[i + 1].cells[1].innerText);
+	        if (x > y) {
+	          shouldSwitch = true;
+	          break;
+	        }
+	      }
+	      if (shouldSwitch) {
+	        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+	        switching = true;
+	      }
+	    }
+	  }
 
 	  // -----Diary Page------
 	  Food.createFoodTableWithCheckBox().then(function (foodsHTML) {
@@ -212,6 +290,7 @@
 	    Object.keys(mealsCalories).forEach(function (meal) {
 	      var { index, calories } = mealsCalories[meal];
 	      var consumed = 0;
+	      //debugger
 	      var cals = document.getElementById(`meal-${index}`).children;
 	      for (var i = 0; i < cals.length - 2; i++) {
 	        consumed += parseInt(cals[i].children[1].innerHTML);
@@ -240,21 +319,14 @@
 	      $("#remaining-num").addClass("positive");
 	    }
 	  });
+
 	  // Meals Dropdown
+	  var sort = document.getElementById("sort-drop-down");
+	  sort.addEventListener("change", sortFoodTable);
+
 	  var mealOptions = document.getElementById('meal-drop-down');
-	  mealOptions.addEventListener('change', addFoodToMeal);
+	  mealOptions.addEventListener("change", addFoodToMeal);
 	});
-
-	// // sort foods list
-	// var sortingOptions = document.getElementById('filter-drop-down')
-	// sortingOptions.addEventListener('change', sort)
-
-
-	$("#sort-drop-down").addEventListener("change", sortFoodTable);
-	function sortFoodTable() {
-	  debugger;
-	  sorterMethod = this.value;
-	}
 
 /***/ }),
 /* 1 */
