@@ -92,6 +92,28 @@
 	    }).then(function (data) {
 	      Meal.createMealTable(meal_id).then(function (mealHTML) {
 	        $(`#meal-${meal_id}`).html(mealHTML);
+	      }).then(function (data) {
+	        var cals;
+	        if (meal_id == 1) {
+	          cals = 400;
+	        }
+	        if (meal_id == 2) {
+	          cals = 600;
+	        }
+	        if (meal_id == 3) {
+	          cals = 800;
+	        }
+	        if (meal_id == 4) {
+	          cals = 200;
+	        }
+	        Meal.addCalorieRows(meal_id, cals, data);
+	      }).then(function (data) {
+	        Meal.addCalorieData(data);
+	      }).then(function (data) {
+	        var allButtons = document.getElementsByClassName("remove-mealFood");
+	        for (var i = 0; i < allButtons.length; i++) {
+	          allButtons[i].addEventListener('click', removeFoodFromMeal);
+	        }
 	      });
 	    });
 	  });
@@ -104,8 +126,33 @@
 	  $.ajax({
 	    url: `${host}/api/v1/meals/${meal_id}?food_id=${food_id}`,
 	    type: 'DELETE'
+	  }).then(function (data) {
+	    Meal.createMealTable(meal_id).then(function (mealHTML) {
+	      $(`#meal-${meal_id}`).html(mealHTML);
+	    }).then(function (data) {
+	      var cals;
+	      if (meal_id == 1) {
+	        cals = 400;
+	      }
+	      if (meal_id == 2) {
+	        cals = 600;
+	      }
+	      if (meal_id == 3) {
+	        cals = 800;
+	      }
+	      if (meal_id == 4) {
+	        cals = 200;
+	      }
+	      Meal.addCalorieRows(meal_id, cals, data);
+	    }).then(function (data) {
+	      Meal.addCalorieData(data);
+	    }).then(function (data) {
+	      var allButtons = document.getElementsByClassName("remove-mealFood");
+	      for (var i = 0; i < allButtons.length; i++) {
+	        allButtons[i].addEventListener('click', removeFoodFromMeal);
+	      }
+	    });
 	  });
-	  $(`#${mealTableId} tr[data-id='${food_id}']`).html("");
 	}
 
 	Food.deleteButtons = function () {
@@ -121,12 +168,93 @@
 	  }
 	};
 
-	// Food.editCalorieButtons = function() {
-	//   var allCals = document.getElementsByClassName('food-calories')
-	//   for(var i=0; i<allCals.length; i++){
-	//     allCals[i].addEventListener('blur', editCalories)
-	//   }
-	// }
+	//     //Food sorter
+	function sortFoodTable() {
+	  var sorters = $('#sort-drop-down').children();
+	  for (var i = 0; i < sorters.length; i++) {
+	    if (sorters[i].selected) {
+	      someSortingMethod(sorters[i].value);
+	    }
+	  }
+	}
+	function someSortingMethod(num) {
+	  if (num == 1) {
+	    return sortByName();
+	  } else if (num == 2) {
+	    return sortByMostCalories();
+	  } else {
+	    return sortByLeastCalories();
+	  }
+	}
+
+	function sortByName() {
+	  var table, rows, switching, i, x, y, shouldSwitch;
+	  table = document.getElementById("food-table");
+	  switching = true;
+	  while (switching) {
+	    switching = false;
+	    rows = table.getElementsByTagName("TR");
+	    for (i = 0; i < rows.length - 1; i++) {
+	      shouldSwitch = false;
+	      x = rows[i].getElementsByTagName("TD")[0];
+	      y = rows[i + 1].getElementsByTagName("TD")[0];
+	      if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+	        shouldSwitch = true;
+	        break;
+	      }
+	    }
+	    if (shouldSwitch) {
+	      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+	      switching = true;
+	    }
+	  }
+	}
+
+	function sortByMostCalories() {
+	  var table, rows, switching, i, x, y, shouldSwitch;
+	  table = document.getElementById("food-table");
+	  switching = true;
+	  while (switching) {
+	    switching = false;
+	    rows = table.getElementsByTagName("TR");
+	    for (i = 0; i < rows.length - 1; i++) {
+	      shouldSwitch = false;
+	      x = parseInt(rows[i].cells[1].innerText);
+	      y = parseInt(rows[i + 1].cells[1].innerText);
+	      if (x < y) {
+	        shouldSwitch = true;
+	        break;
+	      }
+	    }
+	    if (shouldSwitch) {
+	      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+	      switching = true;
+	    }
+	  }
+	}
+
+	function sortByLeastCalories() {
+	  var table, rows, switching, i, x, y, shouldSwitch;
+	  table = document.getElementById("food-table");
+	  switching = true;
+	  while (switching) {
+	    switching = false;
+	    rows = table.getElementsByTagName("TR");
+	    for (i = 0; i < rows.length - 1; i++) {
+	      shouldSwitch = false;
+	      x = parseInt(rows[i].cells[1].innerText);
+	      y = parseInt(rows[i + 1].cells[1].innerText);
+	      if (x > y) {
+	        shouldSwitch = true;
+	        break;
+	      }
+	    }
+	    if (shouldSwitch) {
+	      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+	      switching = true;
+	    }
+	  }
+	}
 
 	$(function () {
 	  Food.createFoodsTable().then(function (foodsHTML) {
@@ -140,7 +268,6 @@
 	    for (var i = 0; i < allCals.length; i++) {
 	      allCals[i].addEventListener('blur', editCalories);
 	    }
-	    //Food.editCaloriesButtons(data)
 	  });
 
 	  $('input[type=submit]').on('click', function () {
@@ -155,6 +282,7 @@
 	      }
 	    });
 	  });
+
 	  $('#filter-by-name').on('keyup', filterFoods);
 
 	  function filterFoods() {
@@ -167,8 +295,12 @@
 	      foods[i].parentElement.style.display = matchedFilter ? "" : "none";
 	    }
 	  }
-	  ///////////////////////////////////
+	  // Food Sorter
 
+	  var sort = document.getElementById("sort-drop-down");
+	  if (sort) {
+	    sort.addEventListener("change", sortFoodTable);
+	  }
 
 	  // -----Diary Page------
 	  Food.createFoodTableWithCheckBox().then(function (foodsHTML) {
@@ -192,69 +324,24 @@
 	      allButtons[i].addEventListener('click', removeFoodFromMeal);
 	    }
 	  }).then(function (data) {
-	    //  Calorie Data on Meal Tables
-	    $('<tr><td><b>Total Calories</b></td><td colspan="2" id="breakfast-total"><b>400<b></td></tr>').appendTo("#meal-1");
-	    $('<tr><td><b>Remaining Calories</b></td><td colspan="2" id="breakfast-remaining"></td></tr>').appendTo("#meal-1");
-	    $('<tr><<td><b>Total Calories</b></td><td colspan="2" id="lunch-total"><b>600</b></td></tr>').appendTo("#meal-2");
-	    $('<tr><td><b>Remaining Calories</b></td><td colspan="2" id="lunch-remaining"></td></tr>').appendTo("#meal-2");
-	    $('<tr><td><b>Total Calories</b></td><td colspan="2" id="dinner-total"><b>800</b></td></tr>').appendTo("#meal-3");
-	    $('<tr><td><b>Remaining Calories</b></td><td colspan="2" id="dinner-remaining"></td></tr>').appendTo("#meal-3");
-	    $('<tr><td><b>Total Calories</b></td><td colspan="2" id="snack-total"><b>200</b></td></tr>').appendTo("#meal-4");
-	    $('<tr><td><b>Remaining Calories</b></td><td colspan="2" id="snack-remaining"></td></tr>').appendTo("#meal-4");
+	    Meal.addCalorieRows(1, 400);
 	  }).then(function (data) {
-
-	    // Meal Table Calories
-	    const mealsCalories = { "breakfast": { index: 1, calories: 400 },
-	      "lunch": { index: 2, calories: 460 },
-	      "dinner": { index: 3, calories: 800 },
-	      "snack": { index: 4, calories: 200 }
-	    };
-	    Object.keys(mealsCalories).forEach(function (meal) {
-	      var { index, calories } = mealsCalories[meal];
-	      var consumed = 0;
-	      var cals = document.getElementById(`meal-${index}`).children;
-	      for (var i = 0; i < cals.length - 2; i++) {
-	        consumed += parseInt(cals[i].children[1].innerHTML);
-	      }
-	      $(`#${meal}-total`).html(`${consumed} of ${calories}`);
-	      $(`#${meal}-remaining`).html(`${calories - consumed}`);
-
-	      var count = $(`#${meal}-remaining`)[0].innerHTML;
-	      var colorClass = count.includes('-') ? "negative" : "positive";
-	      $(`#${meal}-remaining`).addClass(colorClass);
-	    });
-
-	    // Total Calories Table
-	    var totalConsumed = 0;
-	    var allCalories = document.getElementsByClassName("mealFood-calories");
-	    for (var i = 0; i < allCalories.length; i++) {
-	      totalConsumed += parseInt(allCalories[i].innerHTML);
-	    }
-	    $('#consumed-num').html(`${totalConsumed}`);
-	    $('#remaining-num').html(`${2000 - totalConsumed}`);
-	    var calCount = $('#remaining-num').text();
-
-	    if (calCount.includes('-')) {
-	      $("#remaining-num").addClass("negative");
-	    } else {
-	      $("#remaining-num").addClass("positive");
-	    }
+	    Meal.addCalorieRows(2, 600);
+	  }).then(function (data) {
+	    Meal.addCalorieRows(3, 800);
+	  }).then(function (data) {
+	    Meal.addCalorieRows(4, 200);
+	  }).then(function (data) {
+	    Meal.addCalorieData();
 	  });
 	  // Meals Dropdown
+
 	  var mealOptions = document.getElementById('meal-drop-down');
 	  mealOptions.addEventListener('change', addFoodToMeal);
+
+	  // var sort = document.getElementById("sort-drop-down")
+	  // sort.addEventListener("change", sortFoodTable)
 	});
-
-	// // sort foods list
-	// var sortingOptions = document.getElementById('filter-drop-down')
-	// sortingOptions.addEventListener('change', sort)
-
-
-	$("#sort-drop-down").addEventListener("change", sortFoodTable);
-	function sortFoodTable() {
-	  debugger;
-	  sorterMethod = this.value;
-	}
 
 /***/ }),
 /* 1 */
@@ -11026,6 +11113,48 @@
 	  });
 	};
 
+	Meal.addCalorieRows = function (meal_id, cals) {
+	  $(`<tr><td><b>Total Calories</b></td><td colspan="2" id="${meal_id}-total"><b>${cals}<b></td></tr>`).appendTo(`#meal-${meal_id}`);
+	  $(`<tr><td><b>Remaining Calories</b></td><td colspan="2" id="${meal_id}-remaining"></td></tr>`).appendTo(`#meal-${meal_id}`);
+	};
+
+	Meal.addCalorieData = function () {
+	  const mealsCalories = { "breakfast": { index: 1, calories: 400 },
+	    "lunch": { index: 2, calories: 600 },
+	    "dinner": { index: 3, calories: 800 },
+	    "snack": { index: 4, calories: 200 }
+	  };
+	  Object.keys(mealsCalories).forEach(function (meal) {
+	    var { index, calories } = mealsCalories[meal];
+	    var consumed = 0;
+	    var cals = document.getElementById(`meal-${index}`).children;
+	    for (var i = 0; i < cals.length - 2; i++) {
+	      consumed += parseInt(cals[i].children[1].innerHTML);
+	    }
+	    $(`#${index}-total`).html(`${consumed} of ${calories}`);
+	    $(`#${index}-remaining`).html(`${calories - consumed}`);
+
+	    var count = $(`#${index}-remaining`)[0].innerHTML;
+	    var colorClass = count.includes('-') ? "negative" : "positive";
+	    $(`#${index}-remaining`).addClass(colorClass);
+	  });
+
+	  // Total Calories Table
+	  var totalConsumed = 0;
+	  var allCalories = document.getElementsByClassName("mealFood-calories");
+	  for (var i = 0; i < allCalories.length; i++) {
+	    totalConsumed += parseInt(allCalories[i].innerHTML);
+	  }
+	  $('#consumed-num').html(`${totalConsumed}`);
+	  $('#remaining-num').html(`${2000 - totalConsumed}`);
+	  var calCount = $('#remaining-num').text();
+
+	  if (calCount.includes('-')) {
+	    $("#remaining-num").addClass("negative");
+	  } else {
+	    $("#remaining-num").addClass("positive");
+	  }
+	};
 	module.exports = Meal;
 
 /***/ })

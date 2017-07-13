@@ -1,7 +1,6 @@
 const assert = require('chai').assert
 const Meal = require('../../lib/meals')
 const Food = require('../../lib/foods')
-const pry = require("pryjs")
 
 describe('Food', function() {
   it('can turn an API response into HTML', function(done) {
