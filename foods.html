@@ -11,23 +11,20 @@
     <div class='flex-item' id="food-list">
       <h2 class='title' align='center'>Foods</h2>
 
-      <div class='flex-item' id="add-food" align='center'>
+      <div class='flex-item' align='center'>
         <h4 class='title'>Filter by name</h4>
         <input type="text" id='filter-by-name' placeholder='Name of food..'>
-      </div>
-      <div id="add-food">
-        <!-- <h3 class='title' align='center'>Add Selected Food Item to:</h3> -->
-          <div align="center">
-            <select id='filter-drop-down'>
-              <option value="0">Sort by...</option>
-              <option value="1">Most Calories</option>
-              <option value="2">Least Calories</option>
-              <option value="3">Most Recently Added</option>
-              <option value="4">Oldest Added</option>
+        <!-- <div id="sort"> -->
+          <!-- <h3 class='title' align='center'>Add Selected Food Item to:</h3> -->
+          <select id='sort-drop-down'>
+            <option value="0">Sort by...</option>
+              <option value="1">By Name</option>
+            <option value="2">Most Calories</option>
+            <option value="3">Least Calories</option>
           </select>
-        </div>
-
+        <!-- </div> -->
       </div>
+
       <div class='flex-item'>
         <table id='food-table' align='center'>
           <tr>
@@ -56,6 +53,7 @@
       </form>
     </div>
   </div>
+
   <script src="main.bundle.js"></script>
 </body>
 </html>
