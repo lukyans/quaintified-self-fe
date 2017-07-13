@@ -8,6 +8,7 @@ module.exports = {
   output: {
     path: __dirname,
     filename: "[name].bundle.js"
+    // filename: "foods-index.bundle.js"
   },
   module: {
     loaders: [

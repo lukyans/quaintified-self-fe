@@ -1,6 +1,5 @@
 const Meal = require('../../lib/meals')
 const Food = require('../../lib/foods')
-const pry = require('pryjs')
 const assert = require('chai').assert
 
 describe('Meal', function(){
